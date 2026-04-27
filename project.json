@@ -1,0 +1,27 @@
+{
+  "overview": "A comprehensive internal management system for car modification and service workshops. Manages the full lifecycle of workshop jobs from creation to completion — with worker assignment, real-time timers, incentive calculations, attendance tracking, in-app notifications, and role-specific dashboards for Admin, Sales Manager, and Workshop Manager.",
+  "features": [
+    "Role-based login for Admin, Sales Manager, and Workshop Manager",
+    "Job card creation with auto-generated Job IDs and full status history",
+    "Worker profiles with assignment history, incentives, and attendance records",
+    "Real-time job timers that persist across page refreshes",
+    "Incentive pool calculation with time-weighted distribution and early-finish bonuses",
+    "Biometric attendance via CSV import with late/absent/idle flagging",
+    "In-app notification centre with configurable templates and unread badge",
+    "Role-specific dashboards with live job, worker, and attendance data",
+    "Filterable reports with CSV and PDF export for jobs, workers, incentives, and attendance",
+    "Full audit log — every action recorded, no deletions"
+  ],
+  "category": "productivity",
+  "tags": [
+    "workshop",
+    "job-management",
+    "attendance",
+    "incentives",
+    "internal-tool",
+    "team-management",
+    "reports",
+    "audit-log"
+  ],
+  "last_updated": "2026-04-25T14:17:55.611Z"
+}

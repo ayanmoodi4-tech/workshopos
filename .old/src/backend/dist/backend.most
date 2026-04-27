@@ -1,0 +1,279 @@
+// Version: 1.0.0
+type AppSettings__488687976 =
+  {
+    absentFlagDays : Nat;
+    earlyBonusThresholdPercent : Nat;
+    idleDetectionMinutes : Nat;
+    incentivePoolPercent : Nat;
+    lateThresholdMinutes : Nat;
+    overdueAlertOffsetHours : Nat
+  };
+type Assignment__286129986 =
+  {
+    assignedAt : Timestamp__301639476;
+    assignedBy : Principal;
+    assistWorkerIds : [WorkerId__914852314];
+    jobId : JobId__339598917;
+    primaryWorkerId : WorkerId__914852314;
+    reassignmentHistory : [ReassignmentEntry__44861283]
+  };
+type AssistShare__341272637 = {amount : Nat; workerId : WorkerId__691616538};
+type AttendanceId__870686055 = Nat;
+type AttendanceRecord__897312821 =
+  {
+    biometricEmployeeId : Text;
+    checkInAt : ?Timestamp__301639476;
+    checkOutAt : ?Timestamp__301639476;
+    date : Text;
+    id : AttendanceId__870686055;
+    importBatchId : ImportBatchId__299962443;
+    importedAt : Timestamp__301639476;
+    isAbsent : Bool;
+    isLate : Bool;
+    workerId : WorkerId__914852314
+  };
+type AuditEntityType__979024280 =
+  {
+    #assignment;
+    #attendance;
+    #incentive;
+    #job;
+    #notification;
+    #product;
+    #setting;
+    #worker
+  };
+type AuditEntryId__498715992 = Nat;
+type AuditEntry__455403035 =
+  {
+    action : Text;
+    actorPrincipal : Principal;
+    details : Text;
+    entityId : Text;
+    entityType : AuditEntityType__979024280;
+    id : AuditEntryId__498715992;
+    timestamp : Timestamp__301639476
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type ImportBatchId__299962443 = Text;
+type IncentiveLedgerEntry__773926791 =
+  {
+    amount : Nat;
+    distributedAt : Timestamp__995667194;
+    earlyBonus : Bool;
+    jobId : JobId__801115199;
+    workerId : WorkerId__691616538
+  };
+type IncentivePool__673756494 =
+  {
+    var assistWorkerShares : [AssistShare__341272637];
+    var distributedAt : ?Timestamp__995667194;
+    var earlyBonus : Nat;
+    jobId : JobId__801115199;
+    var primaryWorkerShare : Nat;
+    var status : IncentiveStatus__449551193;
+    totalPool : Nat
+  };
+type IncentiveStatus__449551193 = {#distributed; #pending};
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type JobComplexity__253272706 = Nat;
+type JobId__339598917 = Text;
+type JobId__801115199 = JobId__339598917;
+type JobPriority__801433996 = {#high; #low; #medium};
+type JobStatusEntry__456140903 =
+  {
+    changedBy : Principal;
+    note : Text;
+    status : JobStatus__73570871;
+    timestamp : Timestamp__301639476
+  };
+type JobStatus__73570871 =
+  {#cancelled; #completed; #inProgress; #paused; #pendingAssignment};
+type Job__685064324 =
+  {
+    cancellationReason : ?Text;
+    carMake : Text;
+    carModel : Text;
+    carPlate : Text;
+    carYear : Nat;
+    complexity : JobComplexity__253272706;
+    createdAt : Timestamp__301639476;
+    createdBy : Principal;
+    customerName : Text;
+    customerPhone : Text;
+    description : Text;
+    estimatedHours : Nat;
+    jobId : JobId__339598917;
+    priority : JobPriority__801433996;
+    productIds : [ProductId__160010635];
+    projectPrice : Nat;
+    status : JobStatus__73570871;
+    statusHistory : [JobStatusEntry__456140903]
+  };
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type NotificationId__661398602 = Nat;
+type NotificationRecord__953834454 =
+  {
+    createdAt : Timestamp__301639476;
+    entityId : ?Text;
+    id : NotificationId__661398602;
+    message : Text;
+    readBy : [Principal];
+    recipientRole : RecipientRole__328516773;
+    title : Text;
+    trigger : NotificationTrigger__723846062
+  };
+type NotificationTemplate__657817369 =
+  {
+    active : Bool;
+    id : TemplateId__685600827;
+    messageTemplate : Text;
+    titleTemplate : Text;
+    trigger : NotificationTrigger__723846062;
+    updatedAt : Timestamp__301639476;
+    updatedBy : Principal
+  };
+type NotificationTrigger__723846062 =
+  {
+    #attendance_anomaly;
+    #incentive_awarded;
+    #job_completed;
+    #job_created;
+    #overdue;
+    #status_changed;
+    #worker_idle
+  };
+type ProductId__160010635 = Nat;
+type Product__906938297 =
+  {
+    active : Bool;
+    code : ?Text;
+    id : ProductId__160010635;
+    name : Text;
+    notes : ?Text
+  };
+type ReassignmentEntry__44861283 =
+  {
+    changedBy : Principal;
+    fromWorkerId : WorkerId__914852314;
+    reason : Text;
+    timestamp : Timestamp__301639476;
+    toWorkerId : WorkerId__914852314
+  };
+type RecipientRole__328516773 =
+  {#admin; #all; #salesManager; #workshopManager};
+type TemplateId__685600827 = Nat;
+type TimerRecord__418234792 =
+  {
+    jobId : JobId__801115199;
+    var pausedAt : ?Timestamp__995667194;
+    startedAt : Timestamp__995667194;
+    var state : TimerState__503353719;
+    var totalPausedNanos : Nat
+  };
+type TimerState__503353719 = {#paused; #running; #stopped};
+type Timestamp__301639476 = Int;
+type Timestamp__995667194 = Timestamp__301639476;
+type UserRole__1073662873 = {#admin; #guest; #user};
+type WorkerId__691616538 = WorkerId__914852314;
+type WorkerId__914852314 = Nat;
+type WorkerStatus__1026326050 = {#active; #inactive};
+type Worker__971586813 =
+  {
+    biometricEmployeeId : ?Text;
+    createdAt : Timestamp__301639476;
+    deactivatedAt : ?Timestamp__301639476;
+    email : Text;
+    id : WorkerId__914852314;
+    name : Text;
+    phone : Text;
+    status : WorkerStatus__1026326050
+  };
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1073662873>
+    };
+  stable assignments :
+    {
+      var root : Node__46230540<JobId__339598917, Assignment__286129986>;
+      var size : Nat__490723111
+    };
+  stable attendanceRecords :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?AttendanceRecord__897312821]];
+      var elementIndex : Nat__490723111
+    };
+  stable auditLog :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?AuditEntry__455403035]];
+      var elementIndex : Nat__490723111
+    };
+  stable biometricMapping :
+    {
+      var root : Node__46230540<Text, WorkerId__914852314>;
+      var size : Nat__490723111
+    };
+  stable incentiveLedger :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?IncentiveLedgerEntry__773926791]];
+      var elementIndex : Nat__490723111
+    };
+  stable incentivePools :
+    {
+      var root : Node__46230540<JobId__801115199, IncentivePool__673756494>;
+      var size : Nat__490723111
+    };
+  stable incentiveTimerConfig :
+    {var idleThresholdMinutes : Nat; var poolPercent : Nat};
+  stable jobs :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Job__685064324]];
+      var elementIndex : Nat__490723111
+    };
+  stable notificationTemplates :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?NotificationTemplate__657817369]];
+      var elementIndex : Nat__490723111
+    };
+  stable notificationsList :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?NotificationRecord__953834454]];
+      var elementIndex : Nat__490723111
+    };
+  stable products :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Product__906938297]];
+      var elementIndex : Nat__490723111
+    };
+  stable settingsStore : {var settings : AppSettings__488687976};
+  stable timers :
+    {
+      var root : Node__46230540<JobId__801115199, TimerRecord__418234792>;
+      var size : Nat__490723111
+    };
+  stable workers :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Worker__971586813]];
+      var elementIndex : Nat__490723111
+    }
+};

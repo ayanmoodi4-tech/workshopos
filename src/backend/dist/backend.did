@@ -1,0 +1,434 @@
+type WorkerTimeEntry = 
+ record {
+   trackedNanos: nat;
+   workerId: WorkerId;
+ };
+type WorkerStatus = 
+ variant {
+   active;
+   inactive;
+ };
+type WorkerId = nat;
+type Worker = 
+ record {
+   biometricEmployeeId: opt text;
+   createdAt: Timestamp;
+   deactivatedAt: opt Timestamp;
+   email: text;
+   id: WorkerId;
+   name: text;
+   phone: text;
+   status: WorkerStatus;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UpsertTemplateInput = 
+ record {
+   active: bool;
+   messageTemplate: text;
+   titleTemplate: text;
+   trigger: NotificationTrigger;
+ };
+type UpdateWorkerInput = 
+ record {
+   biometricEmployeeId: opt text;
+   email: text;
+   id: WorkerId;
+   name: text;
+   phone: text;
+ };
+type UpdateSettingsInput = 
+ record {
+   absentFlagDays: opt nat;
+   earlyBonusThresholdPercent: opt nat;
+   idleDetectionMinutes: opt nat;
+   incentivePoolPercent: opt nat;
+   lateThresholdMinutes: opt nat;
+   overdueAlertOffsetHours: opt nat;
+ };
+type UpdateJobInput = 
+ record {
+   carMake: text;
+   carModel: text;
+   carPlate: text;
+   carYear: nat;
+   complexity: JobComplexity;
+   customerName: text;
+   customerPhone: text;
+   description: text;
+   estimatedHours: nat;
+   jobId: JobId;
+   priority: JobPriority;
+   productIds: vec ProductId;
+   projectPrice: nat;
+ };
+type Timestamp = int;
+type TimerState = 
+ variant {
+   paused;
+   running;
+   stopped;
+ };
+type TimerRecordView = 
+ record {
+   elapsedSeconds: nat;
+   jobId: JobId;
+   pausedAt: opt Timestamp;
+   startedAt: Timestamp;
+   state: TimerState;
+   totalPausedNanos: nat;
+ };
+type TemplateId = nat;
+type RecipientRole = 
+ variant {
+   admin;
+   all;
+   salesManager;
+   workshopManager;
+ };
+type ReassignmentEntry = 
+ record {
+   changedBy: principal;
+   fromWorkerId: WorkerId;
+   reason: text;
+   timestamp: Timestamp;
+   toWorkerId: WorkerId;
+ };
+type ReassignWorkerInput = 
+ record {
+   fromWorkerId: WorkerId;
+   jobId: JobId;
+   reason: text;
+   toWorkerId: WorkerId;
+ };
+type ProductId = nat;
+type Product = 
+ record {
+   active: bool;
+   code: opt text;
+   id: ProductId;
+   name: text;
+   notes: opt text;
+ };
+type NotificationTrigger = 
+ variant {
+   attendance_anomaly;
+   incentive_awarded;
+   job_completed;
+   job_created;
+   overdue;
+   status_changed;
+   worker_idle;
+ };
+type NotificationTemplate = 
+ record {
+   active: bool;
+   id: TemplateId;
+   messageTemplate: text;
+   titleTemplate: text;
+   trigger: NotificationTrigger;
+   updatedAt: Timestamp;
+   updatedBy: principal;
+ };
+type NotificationRecord = 
+ record {
+   createdAt: Timestamp;
+   entityId: opt text;
+   id: NotificationId;
+   message: text;
+   readBy: vec principal;
+   recipientRole: RecipientRole;
+   title: text;
+   trigger: NotificationTrigger;
+ };
+type NotificationId = nat;
+type JobStatusEntry = 
+ record {
+   changedBy: principal;
+   note: text;
+   status: JobStatus;
+   timestamp: Timestamp;
+ };
+type JobStatus = 
+ variant {
+   cancelled;
+   completed;
+   inProgress;
+   paused;
+   pendingAssignment;
+ };
+type JobPriority = 
+ variant {
+   high;
+   low;
+   medium;
+ };
+type JobId = text;
+type JobComplexity = nat;
+type Job = 
+ record {
+   cancellationReason: opt text;
+   carMake: text;
+   carModel: text;
+   carPlate: text;
+   carYear: nat;
+   complexity: JobComplexity;
+   createdAt: Timestamp;
+   createdBy: principal;
+   customerName: text;
+   customerPhone: text;
+   description: text;
+   estimatedHours: nat;
+   jobId: JobId;
+   priority: JobPriority;
+   productIds: vec ProductId;
+   projectPrice: nat;
+   status: JobStatus;
+   statusHistory: vec JobStatusEntry;
+ };
+type IncentiveStatus = 
+ variant {
+   distributed;
+   pending;
+ };
+type IncentivePoolView = 
+ record {
+   assistWorkerShares: vec AssistShare;
+   distributedAt: opt Timestamp;
+   earlyBonus: nat;
+   jobId: JobId;
+   primaryWorkerShare: nat;
+   status: IncentiveStatus;
+   totalPool: nat;
+ };
+type IncentiveLedgerEntry = 
+ record {
+   amount: nat;
+   distributedAt: Timestamp;
+   earlyBonus: bool;
+   jobId: JobId;
+   workerId: WorkerId;
+ };
+type ImportBatchId = text;
+type ImportAttendanceInput = 
+ record {
+   batchId: ImportBatchId;
+   records: vec BiometricRawRecord;
+ };
+type CreateWorkerInput = 
+ record {
+   biometricEmployeeId: opt text;
+   email: text;
+   name: text;
+   phone: text;
+ };
+type CreateProductInput = 
+ record {
+   code: opt text;
+   name: text;
+   notes: opt text;
+ };
+type CreateNotificationInput = 
+ record {
+   entityId: opt text;
+   message: text;
+   recipientRole: RecipientRole;
+   title: text;
+   trigger: NotificationTrigger;
+ };
+type CreateJobInput = 
+ record {
+   carMake: text;
+   carModel: text;
+   carPlate: text;
+   carYear: nat;
+   complexity: JobComplexity;
+   customerName: text;
+   customerPhone: text;
+   description: text;
+   estimatedHours: nat;
+   priority: JobPriority;
+   productIds: vec ProductId;
+   projectPrice: nat;
+ };
+type ChangeJobStatusInput = 
+ record {
+   jobId: JobId;
+   newStatus: JobStatus;
+   note: text;
+ };
+type BulkUpsertProductInput = 
+ record {
+   code: opt text;
+   name: text;
+   notes: opt text;
+ };
+type BiometricRawRecord = 
+ record {
+   biometricEmployeeId: text;
+   event: BiometricEvent;
+   eventTimestamp: Timestamp;
+ };
+type BiometricEvent = 
+ variant {
+   checkIn;
+   checkOut;
+ };
+type AuditQueryFilter = 
+ record {
+   actorPrincipal: opt principal;
+   entityId: opt text;
+   entityType: opt AuditEntityType;
+   fromTime: opt Timestamp;
+   toTime: opt Timestamp;
+ };
+type AuditEntryId = nat;
+type AuditEntry = 
+ record {
+   action: text;
+   actorPrincipal: principal;
+   details: text;
+   entityId: text;
+   entityType: AuditEntityType;
+   id: AuditEntryId;
+   timestamp: Timestamp;
+ };
+type AuditEntityType = 
+ variant {
+   assignment;
+   attendance;
+   incentive;
+   job;
+   notification;
+   product;
+   setting;
+   worker;
+ };
+type AttendanceSummary = 
+ record {
+   daysAbsent: nat;
+   daysLate: nat;
+   daysPresent: nat;
+   month: text;
+   workerId: WorkerId;
+ };
+type AttendanceRecord = 
+ record {
+   biometricEmployeeId: text;
+   checkInAt: opt Timestamp;
+   checkOutAt: opt Timestamp;
+   date: text;
+   id: AttendanceId;
+   importBatchId: ImportBatchId;
+   importedAt: Timestamp;
+   isAbsent: bool;
+   isLate: bool;
+   workerId: WorkerId;
+ };
+type AttendanceId = nat;
+type AttendanceFilter = 
+ record {
+   fromDate: opt text;
+   isAbsent: opt bool;
+   isLate: opt bool;
+   toDate: opt text;
+   workerId: opt WorkerId;
+ };
+type AssistShare = 
+ record {
+   amount: nat;
+   workerId: WorkerId;
+ };
+type Assignment = 
+ record {
+   assignedAt: Timestamp;
+   assignedBy: principal;
+   assistWorkerIds: vec WorkerId;
+   jobId: JobId;
+   primaryWorkerId: WorkerId;
+   reassignmentHistory: vec ReassignmentEntry;
+ };
+type AssignWorkersInput = 
+ record {
+   assistWorkerIds: vec WorkerId;
+   jobId: JobId;
+   primaryWorkerId: WorkerId;
+ };
+type AppSettings = 
+ record {
+   absentFlagDays: nat;
+   earlyBonusThresholdPercent: nat;
+   idleDetectionMinutes: nat;
+   incentivePoolPercent: nat;
+   lateThresholdMinutes: nat;
+   overdueAlertOffsetHours: nat;
+ };
+service : {
+  _initializeAccessControl: () -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  assignWorkers: (input: AssignWorkersInput) -> (Assignment);
+  bulkUpsertProducts: (inputs: vec BulkUpsertProductInput) -> (nat);
+  changeJobStatus: (input: ChangeJobStatusInput) -> (opt Job);
+  createJob: (input: CreateJobInput) -> (Job);
+  createJobIncentivePool: (jobId: JobId, projectPrice: nat, elapsedNanos:
+   nat, estimatedHours: nat) -> (opt IncentivePoolView);
+  createNotification: (input: CreateNotificationInput) -> (NotificationId);
+  createProduct: (input: CreateProductInput) -> (Product);
+  createWorker: (input: CreateWorkerInput) -> (Worker);
+  deactivateProduct: (productId: ProductId) -> (bool);
+  deactivateWorker: (workerId: WorkerId) -> (bool);
+  distributeJobIncentive: (jobId: JobId, primaryWorker: WorkerId,
+   assistEntries: vec WorkerTimeEntry, elapsedNanos: nat, estimatedHours:
+   nat) -> ();
+  getAllIncentiveLedger: () -> (vec IncentiveLedgerEntry) query;
+  getAssignment: (jobId: JobId) -> (opt Assignment) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getIdleJobs: () -> (vec JobId) query;
+  getJob: (jobId: JobId) -> (opt Job) query;
+  getJobIncentivePool: (jobId: JobId) -> (opt IncentivePoolView) query;
+  getJobTimerState: (jobId: JobId) -> (opt TimerRecordView) query;
+  getMonthlyAttendanceSummary: (workerId: WorkerId, month: text) ->
+   (AttendanceSummary) query;
+  getMyNotifications: (role: RecipientRole) -> (vec NotificationRecord) query;
+  getPendingIncentives: () -> (vec IncentivePoolView) query;
+  getSettings: () -> (AppSettings) query;
+  getTemplateForTrigger: (trigger: NotificationTrigger) ->
+   (opt NotificationTemplate) query;
+  getUnreadCount: (role: RecipientRole) -> (nat) query;
+  getWorker: (workerId: WorkerId) -> (opt Worker) query;
+  getWorkerLedger: (workerId: WorkerId) -> (vec IncentiveLedgerEntry) query;
+  importAttendance: (input: ImportAttendanceInput) -> (nat);
+  isCallerAdmin: () -> (bool) query;
+  isJobOverdue: (jobId: JobId) -> (opt bool) query;
+  listActiveProducts: () -> (vec Product) query;
+  listAllJobs: () -> (vec Job) query;
+  listBiometricMappings: () -> (vec record {
+                                      text;
+                                      WorkerId;
+                                    }) query;
+  listJobsByStatus: (status: JobStatus) -> (vec Job) query;
+  listJobsByWorker: (workerId: WorkerId) -> (vec Job) query;
+  listNotificationTemplates: () -> (vec NotificationTemplate) query;
+  listWorkers: (status: opt WorkerStatus) -> (vec Worker) query;
+  markAllNotificationsRead: (role: RecipientRole) -> ();
+  markNotificationRead: (notificationId: NotificationId) -> ();
+  pauseJobTimer: (jobId: JobId) -> (TimerRecordView);
+  queryAttendance: (filter: AttendanceFilter) -> (vec AttendanceRecord) query;
+  queryAuditLog: (filter: AuditQueryFilter) -> (vec AuditEntry) query;
+  reassignAssistWorker: (input: ReassignWorkerInput) -> (opt Assignment);
+  reassignPrimaryWorker: (input: ReassignWorkerInput) -> (opt Assignment);
+  resumeJobTimer: (jobId: JobId) -> (TimerRecordView);
+  setBiometricMapping: (biometricEmployeeId: text, workerId: WorkerId) -> ();
+  setIdleThresholdMinutes: (minutes: nat) -> ();
+  setPoolPercent: (percent: nat) -> ();
+  startJobTimer: (jobId: JobId) -> (TimerRecordView);
+  stopJobTimer: (jobId: JobId) -> (TimerRecordView);
+  updateJob: (input: UpdateJobInput) -> (opt Job);
+  updateSettings: (input: UpdateSettingsInput) -> (AppSettings);
+  updateWorker: (input: UpdateWorkerInput) -> (opt Worker);
+  upsertNotificationTemplate: (input: UpsertTemplateInput) -> (TemplateId);
+}
